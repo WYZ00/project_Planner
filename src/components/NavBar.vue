@@ -1,6 +1,6 @@
 <template>
   <nav class="main-nav">
-    <router-link to="/">Projects</router-link>
+    <router-link to="/">Projects</router-link> /
     <router-link :to="{name:'AddProject'}">Add Project</router-link>
 
   </nav>
