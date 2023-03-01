@@ -1,25 +1,30 @@
 <template>
   <div class="home">
     <h1>Home</h1>
-    <div v-for="project in projects" :key="project.id">
+    <FilterNav @filterValue="current=$event" :current='current'></FilterNav>
+    <div v-for="project in filteredProjects" :key="project.id">
       <SingleProject :project="project" @delete="deleteProject" @complete="completeProject"></SingleProject>      
     </div>
   </div>
+  
 </template>
 
 <script>
+import FilterNav from '../components/FilterNav'
 import SingleProject from '../components/SingleProject'
 // @ is an alias to /src
 
 export default {
   name: 'HomeView',
   components: {
+    FilterNav,
     SingleProject,
     
   },
   data(){
     return {
       projects:[],
+      current:'all'
     }
   },
   methods:{
@@ -34,6 +39,17 @@ export default {
       });
       findProject.complete = !findProject.complete;
     },
+  },
+  computed:{
+    filteredProjects(){
+      if(this.current==='complete'){
+        return this.projects.filter(p=>p.complete);
+      }
+      if(this.current==='ongoing'){
+        return this.projects.filter(p=>!p.complete)
+      }
+      return this.projects;
+    }
   },
   mounted(){
     fetch("http://localhost:3000/projects")
